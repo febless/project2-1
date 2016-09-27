@@ -27,11 +27,27 @@ int wait(pid_t pid){
 }
 
 bool create(const char* file, unsigned initial_size){
-
+	/* create file */
+	fd = creat(file, S_IREAD | S_IWRITE);
+	if(fd == -1)
+		return FALSE;
+		/* perror("error creating a data file"); */
+	/* initialize size */
+	FILE *fp = fopen(file, "w");
+	fseek(fp, initial_size, SEEK_SET);
+	fputc('\0', fp);
+	fclose(fp);
+	/* Note that in c, in order to initialize a file size,
+	 * must open the file first, */
+	return TRUE;
 }
 
 bool remove(const char* file){
-
+	/* unable to use remove() since it will be recursion */
+	status = unlink(file);
+	if(status == -1)
+		return FALSE;
+	return TRUE;
 }
 
 int open(const char* file){
