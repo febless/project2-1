@@ -3,6 +3,7 @@
 #include <syscall-nr.h>
 #include "threads/interrupt.h"
 #include "threads/thread.h"
+#include "filesys/filesys.h"
 
 static void syscall_handler (struct intr_frame *);
 
@@ -27,35 +28,23 @@ int wait(pid_t pid){
 }
 
 bool create(const char* file, unsigned initial_size){
-	/* create file */
-	fd = creat(file, S_IREAD | S_IWRITE);
-	if(fd == -1)
-		return FALSE;
-		/* perror("error creating a data file"); */
-	/* initialize size */
-	FILE *fp = fopen(file, "w");
-	fseek(fp, initial_size, SEEK_SET);
-	fputc('\0', fp);
-	fclose(fp);
-	/* Note that in c, in order to initialize a file size,
-	 * must open the file first, */
-	return TRUE;
+	return filesys_create(file, initial_size);
 }
 
 bool remove(const char* file){
-	/* unable to use remove() since it will be recursion */
-	status = unlink(file);
-	if(status == -1)
-		return FALSE;
-	return TRUE;
+	return filesys_remove(file);
 }
 
 int open(const char* file){
-
+	struct file* fd = filesys_open(file);
+	if(fd == NULL){
+		return -1;
+	}
+	return file_tell(fd);
 }
 
 int filesize(int fd){
-	return lseek(fd, 0, SEEK_END);
+	
 }
 
 int read(int fd, void* buffer, unsigned size){
