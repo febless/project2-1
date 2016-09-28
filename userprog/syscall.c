@@ -11,7 +11,7 @@ void syscall_init (void){
 }
 
 void halt(void){
-
+	shutdown_power_off();
 }
 
 void exit(int status){
@@ -55,7 +55,7 @@ int open(const char* file){
 }
 
 int filesize(int fd){
-
+	return lseek(fd, 0, SEEK_END);
 }
 
 int read(int fd, void* buffer, unsigned size){

@@ -31,7 +31,6 @@ process_execute (const char *file_name)
   char *fn_copy;
   tid_t tid;
   int argc = 0;
-
   /* Make a copy of FILE_NAME.
      Otherwise there's a race between the caller and load(). */
   fn_copy = palloc_get_page (0);
@@ -47,7 +46,7 @@ process_execute (const char *file_name)
   /* palloc each argument on to the stack */
   char* each_argument = strtok(file_name, " ");
   while(each_argument != NULL){
-
+    
     each_argument = strtok(NULL, " ");
     argc ++;
   }
