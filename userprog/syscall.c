@@ -4,6 +4,8 @@
 #include "threads/interrupt.h"
 #include "threads/thread.h"
 #include "filesys/filesys.h"
+#include "filesys/file.h"
+#include "filesys/file_management.h"
 
 static void syscall_handler (struct intr_frame *);
 
@@ -43,16 +45,35 @@ int open(const char* file){
 	return file_tell(fd);
 }
 
+struct file* findFile(int fd){
+	int i;
+	for(i = 0; i < Files.size; i ++){
+		if(Files.get(i).fd == fd){
+			return Files.get(i).file_hold;
+		}
+	}
+}
+
 int filesize(int fd){
-	
+	return file_length(findFile(fd));
 }
 
 int read(int fd, void* buffer, unsigned size){
+	if(fd == 0){
+		input_getc();
+	}else{
 
+	}
 }
 
 int write(int fd, const void* buffer, unsigned size){
+	if(fd == 1){
+		unsigned max = 256;
+		while()
+		putbuf(buffer, size);
+	}else{
 
+	}
 }
 
 void seek(int fd, unsigned position){
@@ -64,7 +85,7 @@ unsigned tell(int fd){
 }
 
 void close(int fd){
-
+	file_close(findFile(fd));
 }
 
 static void
