@@ -95,7 +95,7 @@ int write(int fd, const void* buffer, unsigned size){
 }
 
 void seek(int fd, unsigned position){
-
+	file_seek(findFile(fd), position);
 }
 
 unsigned tell(int fd){
