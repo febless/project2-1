@@ -7,7 +7,7 @@
 static ArrayList Files;
 
 typedef struct{
-	struct file* file_hold;
+	const char* file_name;
 	int fd;
 } Element;
 
@@ -26,25 +26,27 @@ typedef enum{
 void        init           (ArrayList*const);
 void        initWithSize   (ArrayList*const, int);
 void        initWithSizeAndIncRate    (ArrayList*const, int, int);
-void        clean          (ArrayList*);
-int         add            (ArrayList*const, Element);
-int         insert         (ArrayList*const, Element, int);
+Element*    get            (ArrayList*const, int);
+int         add            (ArrayList*const, const char* file);
 Element*    removeAt       (ArrayList*const, int);
+int         indexOf        (const ArrayList*const, const char* file);
+
+/*
+void        clean          (ArrayList*);
+int         insert         (ArrayList*const, Element, int);
 void        clear          (ArrayList*const);
 int         set            (ArrayList*const, Element, int);
-Element*    get            (ArrayList*const, int);
 void        print          (const ArrayList*const);
 int         lastIndexOf    (const ArrayList*const, Element);
-int         indexOf        (const ArrayList*const, Element);
 int         isEmpty        (const ArrayList*const);
 // TODO
 int        hashCode        (const ArrayList*const);
-
+*/
 
 // static (private) utility functions:
 
 /* Abstracting the print method of the element by delegating it to the element itself (OOP-like feature) */
-static void    printElement(const Element*const);
+//static void    printElement(const Element*const);
 static void    shift(ArrayList *const list, int index, int rooms, Shift dir);
 static void    wide(ArrayList* const);
 

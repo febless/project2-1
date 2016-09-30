@@ -5,6 +5,7 @@
 #include "threads/thread.h"
 #include "filesys/filesys.h"
 #include "filesys/file.h"
+#include "filesys/ArrayList.h"
 
 static void syscall_handler (struct intr_frame *);
 
@@ -41,17 +42,27 @@ int open(const char* file){
 	if(fd == NULL){
 		return -1;
 	}
-	add(&Files, (Element) file);
-	return file_tell(fd);
+	return add(&Files, file);
 }
 
 struct file* findFile(int fd){
 	int i;
 	for(i = 0; i < Files.size; i ++){
 		if(Files.get(i).fd == fd){
-			return Files.get(i).file_hold;
+			return filesys_open(get(&Files, i) -> file_name);
 		}
 	}
+	return NULL;
+}
+
+const char* findFileChar(int fd){
+	int i;
+	for(i = 0; i < Files.size; i ++){
+		if(Files.get(i).fd == fd){
+			return get(&Files, i) -> file_name;
+		}
+	}
+	return NULL;
 }
 
 int filesize(int fd){
@@ -62,17 +73,24 @@ int read(int fd, void* buffer, unsigned size){
 	if(fd == 0){
 		input_getc();
 	}else{
-
+		return file_read(findFile(fd), buffer, size);
 	}
 }
 
 int write(int fd, const void* buffer, unsigned size){
 	if(fd == 1){
-		unsigned max = 256;
-		while()
-		putbuf(buffer, size);
+		unsigned size_copy = size;
+		unsigned max = 128;
+		while(size_copy > max){
+			/* break into chunks */
+			putbuf(buffer, max);
+			buffer += max;
+			size_copy -= max;
+		}
+		putbuf(buffer, size_copy);
+		return size;
 	}else{
-
+		return file_write(findFile(fd), buffer, size);
 	}
 }
 
@@ -81,11 +99,13 @@ void seek(int fd, unsigned position){
 }
 
 unsigned tell(int fd){
-
+	return findFile(fd)->pos;
 }
 
 void close(int fd){
 	file_close(findFile(fd));
+	int index = indexOf(Files, findFileChar(fd));
+	removeAt(Files, index);
 }
 
 static void
