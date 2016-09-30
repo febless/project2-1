@@ -5,7 +5,6 @@
 #include "threads/thread.h"
 #include "filesys/filesys.h"
 #include "filesys/file.h"
-#include "filesys/file_management.h"
 
 static void syscall_handler (struct intr_frame *);
 
@@ -42,6 +41,7 @@ int open(const char* file){
 	if(fd == NULL){
 		return -1;
 	}
+	add(&Files, (Element) file);
 	return file_tell(fd);
 }
 

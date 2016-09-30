@@ -3,10 +3,12 @@
 
 #include "filesys/filesys.h"
 #include "filesys/file.h"
-#include "filesys/file_management.h"
+
+static ArrayList Files;
 
 typedef struct{
-	each_file* data;
+	struct file* file_hold;
+	int fd;
 } Element;
 
 typedef struct{
@@ -16,8 +18,7 @@ typedef struct{
 	Element* elements;
 } ArrayList;
 
-typedef enum
-{
+typedef enum{
     RIFHT, LEFT
 } Shift;
 
