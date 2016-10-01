@@ -65,7 +65,7 @@ int open(const char* file){
 	return add(&Files, file);
 }
 
-struct file* findFile(int fd){
+file* findFile(int fd){
 	int i;
 	for(i = 0; i < Files.size; i ++){
 		if(Files.get(i).fd == fd){

@@ -1,8 +1,7 @@
 #ifndef USERPROG_SYSCALL_H
 #define USERPROG_SYSCALL_H
 
-#include <unistd.h>
-#include <sys/types.h>
+#include <lib/user/syscall.h>
 
 void syscall_init (void);
 void halt(void);

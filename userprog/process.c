@@ -44,6 +44,7 @@ process_execute (const char *file_name)
     palloc_free_page (fn_copy); 
 
   /* palloc each argument on to the stack */
+  /*
   char* each_argument = strtok(file_name, " ");
   while(each_argument != NULL){
     
