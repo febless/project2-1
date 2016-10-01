@@ -18,15 +18,33 @@ void halt(void){
 }
 
 void exit(int status){
-
+	
+  struct thread *current = thread_current();
+  struct child_process* cp = get_child_process(pid); 
+  if(thread_alive(current->parent)){
+	  cur->cp->status =status;
+  }
+  printf("%s:exit(%d)\n", cur->name, status);
+  thread_exit();	
 }
 
 pid_t exec(const char* cmd_line){
-
+	
+  pid_t pid = process_execute(cmd_line);
+  struct child_process* cp = get_child_process(pid);
+  ASSERT(cp);
+  while(cp->load==NOT_LOADED){
+	  barrier();
+  }
+ if (cp->load == LOAD_FAIL){
+	 return ERROR;
+  }
+   return pid;
 }
 
 int wait(pid_t pid){
-
+	
+  return process_wait(pid); 
 }
 
 bool create(const char* file, unsigned initial_size){
