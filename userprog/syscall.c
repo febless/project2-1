@@ -6,12 +6,13 @@
 #include "filesys/filesys.h"
 #include "filesys/file.h"
 #include "filesys/ArrayList.h"
+#include "devices/input.h"
 
 static void syscall_handler (struct intr_frame *);
 
 void syscall_init (void){
 	/*init struct Files */
-	initWithSize(Files, 100);
+	init(&Files);
 	intr_register_int (0x30, 3, INTR_ON, syscall_handler, "syscall");
 }
 
@@ -65,10 +66,10 @@ int open(const char* file){
 	return add(&Files, file);
 }
 
-file* findFile(int fd){
+struct file* findFile(int fd){
 	int i;
 	for(i = 0; i < Files.size; i ++){
-		if(Files.get(i).fd == fd){
+		if(get(&Files, i)->fd == fd){
 			return filesys_open(get(&Files, i) -> file_name);
 		}
 	}
@@ -78,7 +79,7 @@ file* findFile(int fd){
 const char* findFileChar(int fd){
 	int i;
 	for(i = 0; i < Files.size; i ++){
-		if(Files.get(i).fd == fd){
+		if(get(&Files, i)->fd == fd){
 			return get(&Files, i) -> file_name;
 		}
 	}
@@ -92,6 +93,7 @@ int filesize(int fd){
 int read(int fd, void* buffer, unsigned size){
 	if(fd == 0){
 		input_getc();
+		return 1;
 	}else{
 		return file_read(findFile(fd), buffer, size);
 	}
@@ -119,13 +121,13 @@ void seek(int fd, unsigned position){
 }
 
 unsigned tell(int fd){
-	return findFile(fd)->pos;
+	return file_tell(findFile(fd));
 }
 
 void close(int fd){
 	file_close(findFile(fd));
-	int index = indexOf(Files, findFileChar(fd));
-	removeAt(Files, index);
+	int index = indexOf(&Files, findFileChar(fd));
+	removeAt(&Files, index);
 }
 
 static void

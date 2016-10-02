@@ -46,7 +46,7 @@ int add (ArrayList *const list, const char* file){
     return -1;
 }
 
-static void wide(ArrayList* const list){
+void wide(ArrayList* const list){
     list->size += list->increment_rate;
     Element *newArr = (Element*) calloc(sizeof(Element), list->size) ;
     arraryCopy(newArr, 0, list->elements, 0, list->current, list->size, sizeof(Element));
@@ -54,7 +54,7 @@ static void wide(ArrayList* const list){
     list->elements = newArr;
 }
 
-int indexOf (const ArrayList *const list, const char* file){
+int indexOf (ArrayList* const list, const char* file){
     int index = 0;
     while (index <= list->current){
         if(strcmp(file, list->elements[index].file_name) != 0) return index;
@@ -73,7 +73,7 @@ Element* removeAt(ArrayList *const list, int index){
     return NULL;
 }
 
-static void shift(ArrayList *const list, int index, int rooms, Shift dir){
+void shift(ArrayList *const list, int index, int rooms, Shift dir){
     if (dir == RIFHT){
         arraryCopy(list->elements, index+1, list->elements, index, rooms, list->current, sizeof(Element));
     }else{

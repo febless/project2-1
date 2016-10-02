@@ -4,8 +4,6 @@
 #include "filesys/filesys.h"
 #include "filesys/file.h"
 
-static ArrayList Files;
-
 typedef struct{
 	const char* file_name;
 	int fd;
@@ -18,6 +16,8 @@ typedef struct{
 	Element* elements;
 } ArrayList;
 
+static ArrayList Files;
+
 typedef enum{
     RIFHT, LEFT
 } Shift;
@@ -29,7 +29,7 @@ void        initWithSizeAndIncRate    (ArrayList*const, int, int);
 Element*    get            (ArrayList*const, int);
 int         add            (ArrayList*const, const char* file);
 Element*    removeAt       (ArrayList*const, int);
-int         indexOf        (const ArrayList*const, const char* file);
+int         indexOf        (ArrayList*const, const char* file);
 
 /*
 void        clean          (ArrayList*);
@@ -47,7 +47,7 @@ int        hashCode        (const ArrayList*const);
 
 /* Abstracting the print method of the element by delegating it to the element itself (OOP-like feature) */
 //static void    printElement(const Element*const);
-static void    shift(ArrayList *const list, int index, int rooms, Shift dir);
-static void    wide(ArrayList* const);
+void    shift(ArrayList *const list, int index, int rooms, Shift dir);
+void    wide(ArrayList* const);
 
 #endif /* filesys/ArrayList.h */
